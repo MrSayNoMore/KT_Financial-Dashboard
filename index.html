@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="IT Expenditure Tracking System" name="description">
+    <meta content="GlobalTech, IT Expenditure, Tracking" name="keywords">
+  
+    <!-- Favicons -->
+    <link href="It expenses_page\assets\images\kt_logo.png" rel="icon">
+    <link href="It expenses_page\assets\images\kt_logo.png" rel="apple-touch-icon">
+  
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
+  
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYgWS4guehVw7LJHeFUM6-1zd5t8V9uQ0",
+            authDomain: "it-expenditure-tracker.firebaseapp.com",
+            projectId: "it-expenditure-tracker",
+            storageBucket: "it-expenditure-tracker.firebasestorage.app",
+            messagingSenderId: "380960313793",
+            appId: "1:380960313793:web:c2ea450efefd6d82b11f40",
+            measurementId: "G-DNX3CK5C2M"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase functions available globally
+        window.firebaseApp = app;
+        window.firebaseDb = db;
+        window.firebaseFunctions = {
+            collection,
+            addDoc,
+            updateDoc,
+            deleteDoc,
+            doc,
+            getDocs,
+            onSnapshot
+        };
+    </script>
+
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <title>Kagiso Trust_IT | Financial Dashboard</title>
+</head>
+
+<body>
+
+    <!-- Login Screen -->
+    <div class="login-wrapper" id="loginScreen">
+        <div class="login-hero">
+            <h1>Expenditure Tracking System</h1>
+            <p>Kagiso Trust IT Expenditure Tracking System</p>
+        </div>
+
+        <div class="login-form-wrapper">
+            <div class="login-card">
+                <div class="card-header">
+                    <h2><i class="bi bi-shield-lock"></i>Secure Access</h2>
+                    <p>Sign in to the dashboard</p>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div style="margin-bottom: var(--space-6);">
+                            <label class="form-label"><i class="bi bi-envelope" style="color: var(--kt-orange); margin-right: var(--space-2);"></i>Email Address</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Email" required>
+                        </div>
+                        <div style="margin-bottom: var(--space-8);">
+                            <label class="form-label"><i class="bi bi-key" style="color: var(--kt-orange); margin-right: var(--space-2);"></i>Password</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="bi bi-arrow-right" style="margin-right: var(--space-2);"></i>Sign In Now
+                        </button>
+                        <div class="alert alert-danger d-none" id="loginError" style="margin-top: var(--space-4);"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+        <nav class="navbar">
+            <div style="max-width: 1600px; margin: 0 auto; width: 100%; padding: 0 24px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; color: var(--kt-dark);">
+                    <i class="bi bi-graph-up-arrow" style="color: var(--kt-orange); margin-right: 8px;"></i>Kagiso Trust
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <span style="color: var(--text-secondary); font-size: 13px;"><i class="bi bi-person-circle" style="margin-right: 6px;"></i><span id="userEmail"></span></span>
+                    <button onclick="logout()" style="background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 500; transition: var(--transition);">
+                        <i class="bi bi-box-arrow-right" style="margin-right: 4px;"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <!-- Stats Row -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 32px;">
+                <div class="stats-card">
+                    <div class="stats-highlight">
+                        <i class="bi bi-receipt"></i>
+                        <div style="text-align: left;">
+                            <h3 id="totalEntries">0</h3>
+                            <p>Total Entries</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-highlight">
+                        <i class="bi bi-check-circle" style="color: var(--kt-green);"></i>
+                        <div style="text-align: left;">
+                            <h3 id="paidCount" class="text-success">0</h3>
+                            <p>Paid Invoices</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-highlight">
+                        <i class="bi bi-exclamation-circle" style="color: #991b1b;"></i>
+                        <div style="text-align: left;">
+                            <h3 id="notPaidCount" class="text-danger">0</h3>
+                            <p>Pending Payments</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-card total-card">
+                    <div class="stats-highlight">
+                        <div style="text-align: left;">
+                            <h2>R <span id="totalAmount">0.00</span></h2>
+                            <p>Total Amount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h3><i class="bi bi-graph-up-arrow"></i>Financial Overview</h3>
+                <p>Comprehensive analysis of monthly expenses and financial trends</p>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <h5><i class="bi bi-bar-chart" style="color: var(--kt-orange); margin-right: 8px;"></i>Monthly Expenses</h5>
+                    <div class="chart-toolbar">
+                        <select class="form-select" id="barChartYear" style="width: 120px;">
+                            <!-- Dynamic years will be populated -->
+                        </select>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyExpensesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h5><i class="bi bi-graph-up" style="color: var(--kt-orange); margin-right: 8px;"></i>Expense Trend</h5>
+                    <div class="chart-toolbar">
+                        <select class="form-select" id="lineChartYear" style="width: 120px;">
+                            <!-- Dynamic years will be populated -->
+                        </select>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="expenseTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h5><i class="bi bi-pie-chart" style="color: var(--kt-orange); margin-right: 8px;"></i>Breakdown by Category</h5>
+                    <div class="chart-toolbar">
+                        <select class="form-select" id="pieChartMonth" style="width: 120px;">
+                            <option value="">All Months</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="expenseBreakdownChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h5><i class="bi bi-arrow-left-right" style="color: var(--kt-orange); margin-right: 8px;"></i>Year Comparison</h5>
+                    <div class="chart-toolbar">
+                        <select class="form-select" id="comparisonYear" style="width: 120px;">
+                            <!-- Dynamic years will be populated -->
+                        </select>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="monthlyComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-card" style="margin-bottom: 32px;">
+                <div class="card-header">
+                    <h6><i class="bi bi-funnel" style="color: var(--kt-orange); margin-right: 6px;"></i>Data Filtering</h6>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <label class="form-label">Month</label>
+                            <select class="form-select" id="filterMonth">
+                                <option value="">All Months</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Service Provider</label>
+                            <select class="form-select" id="filterProvider">
+                                <option value="">All Providers</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="filterStatus">
+                                <option value="">All Status</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Not Paid">Not Paid</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">POP Received</label>
+                            <select class="form-select" id="filterPOP">
+                                <option value="">All</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-primary" onclick="applyFilters()" style="width: auto; padding: 8px 20px;"><i class="bi bi-search" style="margin-right: 6px;"></i>Apply Filters</button>
+                        <button class="btn-outline-secondary" onclick="resetFilters()"><i class="bi bi-arrow-clockwise" style="margin-right: 6px;"></i>Reset</button>
+                        <button class="btn-outline-success" onclick="exportData()"><i class="bi bi-download" style="margin-right: 6px;"></i>Export Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Table -->
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h6><i class="bi bi-table" style="color: var(--kt-orange); margin-right: 6px;"></i>Transaction Ledger</h6>
+                    <button class="btn-primary" onclick="openModal()" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="bi bi-plus-circle" style="margin-right: 6px;"></i>New Entry</button>
+                </div>
+                <div class="card-body p-0" style="padding: 0;">
+                    <div style="overflow-x: auto;">
+                        <table class="table" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Service Provider</th>
+                                    <th>Invoice #</th>
+                                    <th>Details</th>
+                                    <th>Invoice Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>POP</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="noData" class="d-none" style="text-align: center; padding: 48px 24px; color: var(--text-muted);">
+                        <i class="bi bi-inbox" style="font-size: 48px; display: block; margin-bottom: 12px; opacity: 0.5;"></i>
+                        <p style="margin: 0;">No data available. Add your first entry!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Kagiso Trust. All Rights Reserved.</p>
+            <small>Financial Intelligence System</small>
+        </footer>
+    </div>
+
+    <!-- Add Entry Modal -->
+    <div id="modalBackdrop" class="modal-backdrop d-none" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1050; display: flex; justify-content: center; align-items: center;" onclick="if(event.target === this) closeModal()">
+        <div class="modal-dialog" style="width: 100%; max-width: 500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="modalTitle" style="margin: 0;">New Financial Entry</h5>
+                    <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary);">×</button>
+                </div>
+                <form id="entryForm" onsubmit="handleFormSubmit(event)">
+                    <div class="modal-body">
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Year</label>
+                            <input type="number" class="form-control" id="year" value="2024" required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Month</label>
+                            <select class="form-select" id="month" required>
+                                <option value="">Select Month</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Service Provider</label>
+                            <input type="text" class="form-control" id="vendor" required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Invoice Number</label>
+                            <input type="text" class="form-control" id="invoiceNumber" required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Invoice Date</label>
+                            <input type="date" class="form-control" id="invoiceDate" required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Details</label>
+                            <textarea class="form-control" id="details" rows="2"></textarea>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount" step="0.01" required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="Paid">Paid</option>
+                                <option value="Not Paid">Not Paid</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 0;">
+                            <label class="form-label">POP Received</label>
+                            <select class="form-select" id="popReceived" required>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="display: flex; gap: 12px; justify-content: flex-end;">
+                        <button type="button" class="btn-outline-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary" style="width: auto; padding: 8px 24px;">Save Entry</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        const MASTER_EMAIL = 'mindme360@gmail.com';
+        const MASTER_PASSWORD = 'password@itexpenditure';
+        let expenditures = [];
+        let filteredExpenditures = [];
+        let editingId = null;
+        let charts = {
+            monthly: null,
+            trend: null,
+            breakdown: null,
+            comparison: null
+        };
+
+        // Month order for sorting
+        const monthOrder = {
+            'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6,
+            'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12
+        };
+
+        // Function to sort expenditures by year (descending) and month
+        function sortExpenditures(data) {
+            return data.sort((a, b) => {
+                // First sort by year (descending - newest first)
+                if (parseInt(b.year) !== parseInt(a.year)) {
+                    return parseInt(b.year) - parseInt(a.year);
+                }
+                // Then sort by month order
+                return monthOrder[a.month] - monthOrder[b.month];
+            });
+        }
+
+        // Function to get unique years from data
+        function getUniqueYears() {
+            const years = [...new Set(expenditures.map(item => parseInt(item.year)))].filter(year => !isNaN(year));
+            years.sort((a, b) => b - a); // Sort descending (newest first)
+            return years;
+        }
+
+        // Function to populate year dropdowns
+        function populateYearDropdowns() {
+            const years = getUniqueYears();
+            const currentYear = new Date().getFullYear();
+            
+            // Add current year if no data exists yet
+            if (years.length === 0) {
+                years.push(currentYear);
+            }
+            
+            // Get all year dropdowns
+            const yearDropdowns = [
+                'barChartYear',
+                'lineChartYear', 
+                'comparisonYear'
+            ];
+            
+            yearDropdowns.forEach(dropdownId => {
+                const dropdown = document.getElementById(dropdownId);
+                const currentValue = dropdown.value;
+                
+                dropdown.innerHTML = ''; // Clear existing options
+                
+                years.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    dropdown.appendChild(option);
+                });
+                
+                // Restore previous selection or set to current year
+                if (years.includes(parseInt(currentValue))) {
+                    dropdown.value = currentValue;
+                } else {
+                    dropdown.value = years[0]; // Set to most recent year
+                }
+            });
+        }
+
+        // Firebase functions
+        async function loadData() {
+            try {
+                if (!window.firebaseDb) {
+                    console.error('Firebase not initialized');
+                    return;
+                }
+
+                const querySnapshot = await window.firebaseFunctions.getDocs(
+                    window.firebaseFunctions.collection(window.firebaseDb, "expenditures")
+                );
+                
+                expenditures = [];
+                querySnapshot.forEach((doc) => {
+                    expenditures.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                // Sort expenditures by year (descending) and month
+                expenditures = sortExpenditures(expenditures);
+                filteredExpenditures = [...expenditures];
+                updateProviderDropdown();
+                populateYearDropdowns(); // Populate year dropdowns with actual data
+                renderTable();
+                updateStats();
+                renderCharts();
+            } catch (err) {
+                console.error('Data load error:', err);
+                // Fallback to sessionStorage if Firebase fails
+                const storedData = sessionStorage.getItem('kt_expenditures');
+                expenditures = storedData ? JSON.parse(storedData) : [];
+                // Sort expenditures by year (descending) and month
+                expenditures = sortExpenditures(expenditures);
+                filteredExpenditures = [...expenditures];
+                updateProviderDropdown();
+                populateYearDropdowns(); // Populate year dropdowns with actual data
+                renderTable();
+                updateStats();
+                renderCharts();
+            }
+        }
+
+        async function saveData(entry, isEdit = false) {
+            try {
+                if (!window.firebaseDb) {
+                    throw new Error('Firebase not initialized');
+                }
+
+                if (isEdit && editingId) {
+                    // Update existing document
+                    const docRef = window.firebaseFunctions.doc(window.firebaseDb, "expenditures", editingId);
+                    await window.firebaseFunctions.updateDoc(docRef, entry);
+                } else {
+                    // Add new document
+                    await window.firebaseFunctions.addDoc(
+                        window.firebaseFunctions.collection(window.firebaseDb, "expenditures"),
+                        entry
+                    );
+                }
+                
+                // Reload data from Firebase
+                await loadData();
+            } catch (err) {
+                console.error('Firebase save error:', err);
+                // Fallback to sessionStorage
+                fallbackSaveData(entry, isEdit);
+            }
+        }
+
+        function fallbackSaveData(entry, isEdit = false) {
+            try {
+                if (isEdit && editingId) {
+                    const index = expenditures.findIndex(e => e.id === editingId);
+                    if (index !== -1) {
+                        expenditures[index] = {...entry, id: editingId};
+                    }
+                } else {
+                    const newId = 'id_' + Date.now();
+                    expenditures.push({...entry, id: newId});
+                }
+                
+                // Sort expenditures after saving
+                expenditures = sortExpenditures(expenditures);
+                sessionStorage.setItem('kt_expenditures', JSON.stringify(expenditures));
+                loadData();
+            } catch (err) {
+                console.error('Fallback save error:', err);
+            }
+        }
+
+        async function deleteEntry(id) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                try {
+                    if (!window.firebaseDb) {
+                        throw new Error('Firebase not initialized');
+                    }
+
+                    await window.firebaseFunctions.deleteDoc(
+                        window.firebaseFunctions.doc(window.firebaseDb, "expenditures", id)
+                    );
+                    
+                    await loadData();
+                } catch (err) {
+                    console.error('Firebase delete error:', err);
+                    // Fallback to sessionStorage
+                    expenditures = expenditures.filter(e => e.id !== id);
+                    // Sort expenditures after deletion
+                    expenditures = sortExpenditures(expenditures);
+                    sessionStorage.setItem('kt_expenditures', JSON.stringify(expenditures));
+                    loadData();
+                }
+            }
+        }
+
+        // Rest of your existing functions remain the same
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('barChartYear').addEventListener('change', renderCharts);
+            document.getElementById('lineChartYear').addEventListener('change', renderCharts);
+            document.getElementById('pieChartMonth').addEventListener('change', renderCharts);
+            document.getElementById('comparisonYear').addEventListener('change', renderCharts);
+        });
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            errorDiv.classList.add('d-none');
+
+            if (email === MASTER_EMAIL && password === MASTER_PASSWORD) {
+                document.getElementById('userEmail').textContent = email;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                loadData();
+            } else {
+                errorDiv.textContent = 'Invalid credentials. Please try again.';
+                errorDiv.classList.remove('d-none');
+            }
+        }
+
+        window.logout = () => {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        };
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const noData = document.getElementById('noData');
+            
+            if (filteredExpenditures.length === 0) {
+                tbody.innerHTML = '';
+                noData.classList.remove('d-none');
+                return;
+            }
+            
+            noData.classList.add('d-none');
+            tbody.innerHTML = filteredExpenditures.map(item => `
+                <tr>
+                    <td>${item.year || '-'}</td>
+                    <td>${item.month}</td>
+                    <td>${item.vendor}</td>
+                    <td>${item.invoiceNumber || '-'}</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.details || '-'}</td>
+                    <td>${item.invoiceDate || '-'}</td>
+                    <td style="font-weight: 600; color: var(--kt-orange);">R ${parseFloat(item.amount || 0).toFixed(2)}</td>
+                    <td><span class="status-${item.status?.toLowerCase().replace(' ', '-') || 'not-paid'}">${item.status || 'Not Paid'}</span></td>
+                    <td><span class="status-${item.popReceived?.toLowerCase() || 'no'}">${item.popReceived || 'No'}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn-sm btn-primary" onclick="editEntry('${item.id}')" style="background: var(--kt-orange); color: white; padding: 6px 10px;"><i class="bi bi-pencil"></i></button>
+                        <button class="btn-sm btn-danger" onclick="deleteEntry('${item.id}')"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const total = filteredExpenditures.length;
+            const paid = filteredExpenditures.filter(e => e.status === 'Paid').length;
+            const totalAmount = filteredExpenditures.reduce((sum, e) => sum + parseFloat(e.amount || 0), 0);
+            document.getElementById('totalEntries').textContent = total;
+            document.getElementById('paidCount').textContent = paid;
+            document.getElementById('notPaidCount').textContent = total - paid;
+            document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+        }
+
+        function renderCharts() {
+            renderMonthlyExpensesChart();
+            renderExpenseTrendChart();
+            renderExpenseBreakdownChart();
+            renderMonthlyComparisonChart();
+        }
+
+        function destroyChart(chartKey) {
+            if (charts[chartKey]) {
+                charts[chartKey].destroy();
+                charts[chartKey] = null;
+            }
+        }
+
+        function renderMonthlyExpensesChart() {
+            destroyChart('monthly');
+            const ctx = document.getElementById('monthlyExpensesChart').getContext('2d');
+            const selectedYear = document.getElementById('barChartYear').value;
+            const monthOrderArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthlyData = {};
+            
+            monthOrderArray.forEach(month => {
+                monthlyData[month] = 0;
+            });
+
+            expenditures
+                .filter(item => item.year == selectedYear)
+                .forEach(item => {
+                    if (monthlyData.hasOwnProperty(item.month)) {
+                        monthlyData[item.month] += parseFloat(item.amount || 0);
+                    }
+                });
+
+            charts.monthly = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthOrderArray.map(m => m.substring(0, 3)),
+                    datasets: [{
+                        label: 'Monthly Expenses',
+                        data: monthOrderArray.map(month => parseFloat(monthlyData[month].toFixed(2))),
+                        backgroundColor: 'rgba(213, 108, 56, 0.7)',
+                        borderColor: 'rgba(213, 108, 56, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R ' + value;
+                                }
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function renderExpenseTrendChart() {
+            destroyChart('trend');
+            const ctx = document.getElementById('expenseTrendChart').getContext('2d');
+            const selectedYear = document.getElementById('lineChartYear').value;
+            const monthOrderArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthlyData = {};
+            
+            monthOrderArray.forEach(month => {
+                monthlyData[month] = 0;
+            });
+
+            expenditures
+                .filter(item => item.year == selectedYear)
+                .forEach(item => {
+                    if (monthlyData.hasOwnProperty(item.month)) {
+                        monthlyData[item.month] += parseFloat(item.amount || 0);
+                    }
+                });
+
+            const actualData = monthOrderArray.map(month => parseFloat(monthlyData[month].toFixed(2)));
+
+            charts.trend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: monthOrderArray.map(m => m.substring(0, 3)),
+                    datasets: [{
+                        label: 'Expense Trend',
+                        data: actualData,
+                        borderColor: 'rgba(6, 87, 53, 1)',
+                        backgroundColor: 'rgba(6, 87, 53, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(6, 87, 53, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R ' + value;
+                                }
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function renderExpenseBreakdownChart() {
+            destroyChart('breakdown');
+            const ctx = document.getElementById('expenseBreakdownChart').getContext('2d');
+            const selectedMonth = document.getElementById('pieChartMonth').value;
+            
+            const vendorData = {};
+            
+            expenditures
+                .filter(item => !selectedMonth || item.month === selectedMonth)
+                .forEach(item => {
+                    if (!vendorData[item.vendor]) {
+                        vendorData[item.vendor] = 0;
+                    }
+                    vendorData[item.vendor] += parseFloat(item.amount || 0);
+                });
+
+            const sortedVendors = Object.entries(vendorData)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const labels = sortedVendors.map(v => v[0]);
+            const data = sortedVendors.map(v => v[1]);
+            
+            const colors = [
+                'rgba(213, 108, 56, 0.7)',
+                'rgba(6, 87, 53, 0.7)',
+                'rgba(213, 166, 42, 0.7)',
+                'rgba(108, 117, 125, 0.7)',
+                'rgba(40, 167, 69, 0.7)'
+            ];
+
+            charts.breakdown = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color.replace('0.7', '1')),
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        function renderMonthlyComparisonChart() {
+            destroyChart('comparison');
+            const ctx = document.getElementById('monthlyComparisonChart').getContext('2d');
+            const selectedYear = document.getElementById('comparisonYear').value;
+            const previousYear = parseInt(selectedYear) - 1;
+            const monthOrderArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            const currentYearData = {};
+            const previousYearData = {};
+            
+            monthOrderArray.forEach(month => {
+                currentYearData[month] = 0;
+                previousYearData[month] = 0;
+            });
+
+            expenditures
+                .filter(item => item.year == selectedYear)
+                .forEach(item => {
+                    if (currentYearData.hasOwnProperty(item.month)) {
+                        currentYearData[item.month] += parseFloat(item.amount || 0);
+                    }
+                });
+
+            expenditures
+                .filter(item => item.year == previousYear)
+                .forEach(item => {
+                    if (previousYearData.hasOwnProperty(item.month)) {
+                        previousYearData[item.month] += parseFloat(item.amount || 0);
+                    }
+                });
+
+            const currentData = monthOrderArray.map(month => parseFloat(currentYearData[month].toFixed(2)));
+            const previousData = monthOrderArray.map(month => parseFloat(previousYearData[month].toFixed(2)));
+
+            charts.comparison = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthOrderArray.map(m => m.substring(0, 3)),
+                    datasets: [
+                        {
+                            label: selectedYear,
+                            data: currentData,
+                            backgroundColor: 'rgba(213, 108, 56, 0.7)',
+                            borderColor: 'rgba(213, 108, 56, 1)',
+                            borderWidth: 1,
+                            borderRadius: 6
+                        },
+                        {
+                            label: previousYear,
+                            data: previousData,
+                            backgroundColor: 'rgba(6, 87, 53, 0.7)',
+                            borderColor: 'rgba(6, 87, 53, 1)',
+                            borderWidth: 1,
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R ' + value;
+                                }
+                            }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function openModal() {
+            editingId = null;
+            document.getElementById('entryForm').reset();
+            document.getElementById('year').value = new Date().getFullYear();
+            document.getElementById('modalTitle').textContent = 'New Financial Entry';
+            document.getElementById('modalBackdrop').classList.remove('d-none');
+            document.getElementById('modalBackdrop').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalBackdrop').classList.add('d-none');
+            document.getElementById('modalBackdrop').style.display = 'none';
+            editingId = null;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const entry = {
+                year: parseInt(document.getElementById('year').value),
+                month: document.getElementById('month').value,
+                vendor: document.getElementById('vendor').value,
+                invoiceNumber: document.getElementById('invoiceNumber').value,
+                details: document.getElementById('details').value,
+                invoiceDate: document.getElementById('invoiceDate').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                status: document.getElementById('status').value,
+                popReceived: document.getElementById('popReceived').value
+            };
+            saveData(entry, !!editingId);
+            closeModal();
+        }
+
+        window.editEntry = (id) => {
+            editingId = id;
+            const item = expenditures.find(e => e.id === id);
+            if (item) {
+                document.getElementById('year').value = item.year || new Date().getFullYear();
+                document.getElementById('month').value = item.month || '';
+                document.getElementById('vendor').value = item.vendor || '';
+                document.getElementById('invoiceNumber').value = item.invoiceNumber || '';
+                document.getElementById('details').value = item.details || '';
+                document.getElementById('invoiceDate').value = item.invoiceDate || '';
+                document.getElementById('amount').value = item.amount || 0;
+                document.getElementById('status').value = item.status || 'Not Paid';
+                document.getElementById('popReceived').value = item.popReceived || 'No';
+                document.getElementById('modalTitle').textContent = 'Edit Financial Entry';
+                document.getElementById('modalBackdrop').classList.remove('d-none');
+                document.getElementById('modalBackdrop').style.display = 'flex';
+            }
+        };
+
+        window.deleteEntry = deleteEntry; // Already defined above
+
+        function updateProviderDropdown() {
+            const providers = [...new Set(expenditures.map(e => e.vendor).filter(v => v))].sort();
+            const filterProvider = document.getElementById('filterProvider');
+            const currentValue = filterProvider.value;
+            filterProvider.innerHTML = '<option value="">All Providers</option>';
+            providers.forEach(provider => {
+                const option = document.createElement('option');
+                option.value = provider;
+                option.textContent = provider;
+                filterProvider.appendChild(option);
+            });
+            filterProvider.value = currentValue;
+        }
+
+        window.applyFilters = () => {
+            const month = document.getElementById('filterMonth').value;
+            const provider = document.getElementById('filterProvider').value;
+            const status = document.getElementById('filterStatus').value;
+            const pop = document.getElementById('filterPOP').value;
+
+            filteredExpenditures = expenditures.filter(item => {
+                const matchMonth = !month || item.month === month;
+                const matchProvider = !provider || item.vendor === provider;
+                const matchStatus = !status || item.status === status;
+                const matchPOP = !pop || item.popReceived === pop;
+                return matchMonth && matchProvider && matchStatus && matchPOP;
+            });
+
+            renderTable();
+            updateStats();
+        };
+
+        window.resetFilters = () => {
+            document.getElementById('filterMonth').value = '';
+            document.getElementById('filterProvider').value = '';
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterPOP').value = '';
+            filteredExpenditures = [...expenditures];
+            renderTable();
+            updateStats();
+        };
+
+        window.exportData = () => {
+            const headers = ['Year', 'Month', 'Service Provider', 'Invoice Number', 'Details', 'Invoice Date', 'Amount', 'Status', 'POP Received'];
+            const csvContent = [
+                headers.join(','),
+                ...filteredExpenditures.map(item => [
+                    item.year,
+                    item.month,
+                    `"${item.vendor}"`,
+                    `"${item.invoiceNumber}"`,
+                    `"${item.details}"`,
+                    item.invoiceDate,
+                    item.amount,
+                    item.status,
+                    item.popReceived
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'financial_data.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    </script>
+</body>
+</html>
