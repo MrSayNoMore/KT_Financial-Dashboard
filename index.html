@@ -239,6 +239,13 @@
                 <div class="card-body">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
                         <div>
+                            <label class="form-label">Year</label>
+                            <select class="form-select" id="filterYear">
+                                <option value="">All Years</option>
+                                <!-- Dynamic years will be populated -->
+                            </select>
+                        </div>
+                        <div>
                             <label class="form-label">Month</label>
                             <select class="form-select" id="filterMonth">
                                 <option value="">All Months</option>
@@ -472,7 +479,8 @@
             const yearDropdowns = [
                 'barChartYear',
                 'lineChartYear', 
-                'comparisonYear'
+                'comparisonYear',
+                'filterYear' // Added filter year dropdown
             ];
             
             yearDropdowns.forEach(dropdownId => {
@@ -480,6 +488,14 @@
                 const currentValue = dropdown.value;
                 
                 dropdown.innerHTML = ''; // Clear existing options
+                
+                // Add "All Years" option for filter dropdown
+                if (dropdownId === 'filterYear') {
+                    const allOption = document.createElement('option');
+                    allOption.value = '';
+                    allOption.textContent = 'All Years';
+                    dropdown.appendChild(allOption);
+                }
                 
                 years.forEach(year => {
                     const option = document.createElement('option');
@@ -492,7 +508,7 @@
                 if (years.includes(parseInt(currentValue))) {
                     dropdown.value = currentValue;
                 } else {
-                    dropdown.value = years[years.length - 1]; // Set to most recent year
+                    dropdown.value = dropdownId === 'filterYear' ? '' : years[years.length - 1]; // Set to most recent year for charts, empty for filter
                 }
             });
         }
@@ -1053,17 +1069,19 @@
         }
 
         window.applyFilters = () => {
+            const year = document.getElementById('filterYear').value;
             const month = document.getElementById('filterMonth').value;
             const provider = document.getElementById('filterProvider').value;
             const status = document.getElementById('filterStatus').value;
             const pop = document.getElementById('filterPOP').value;
 
             filteredExpenditures = expenditures.filter(item => {
+                const matchYear = !year || item.year == year;
                 const matchMonth = !month || item.month === month;
                 const matchProvider = !provider || item.vendor === provider;
                 const matchStatus = !status || item.status === status;
                 const matchPOP = !pop || item.popReceived === pop;
-                return matchMonth && matchProvider && matchStatus && matchPOP;
+                return matchYear && matchMonth && matchProvider && matchStatus && matchPOP;
             });
 
             renderTable();
@@ -1071,6 +1089,7 @@
         };
 
         window.resetFilters = () => {
+            document.getElementById('filterYear').value = '';
             document.getElementById('filterMonth').value = '';
             document.getElementById('filterProvider').value = '';
             document.getElementById('filterStatus').value = '';
@@ -1111,3 +1130,4 @@
 </body>
 
 </html>
+
